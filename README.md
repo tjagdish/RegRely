@@ -1,45 +1,57 @@
-# RegRely - Regulatory Updates Dashboard
+# RegRely
 
-This application provides real-time regulatory updates for the financial sector using the Perplexity Sonar API.
+AI-powered regulatory compliance dashboard for financial institutions. Stay informed with the latest regulatory updates and banking compliance news, powered by advanced AI analysis.
 
 ## Features
 
-- Live regulatory updates from the past 24 hours, week, and month
-- Caching mechanism to reduce API calls
-- Beautiful, responsive UI
-- Automatic refresh functionality
+- Real-time regulatory updates from federal and state regulators
+- Institution-specific regulatory landscape analysis
+- Customized updates based on your institution's regulators
+- Intelligent caching system to optimize API usage
+- Beautiful, responsive web interface
 
 ## Setup
 
-1. Install Python dependencies:
+1. Clone the repository:
+```bash
+git clone https://github.com/tjagdish/RegRely.git
+cd RegRely
+```
+
+2. Create and activate a virtual environment:
+```bash
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+```
+
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-2. The Perplexity API key is already configured in the application.
+4. Set up your environment variables:
+```bash
+export PERPLEXITY_API_KEY='your_api_key_here'
+```
 
-3. Run the Flask server:
+5. Run the application:
 ```bash
 python app.py
 ```
 
-4. Open `landscape-analyst.html` in your web browser.
-
-## How It Works
-
-- The application uses Flask as a backend server to handle API requests and caching
-- Regulatory updates are fetched from Perplexity Sonar API and cached for 24 hours
-- The frontend makes API calls to the Flask backend instead of directly to Perplexity
-- Updates are displayed in a responsive card layout with importance indicators
-
-## Cache Mechanism
-
-- Updates are cached for 24 hours to minimize API usage
-- Separate caches are maintained for daily, weekly, and monthly updates
-- Cache is automatically refreshed when it expires
+The application will be available at `http://localhost:5001`
 
 ## API Endpoints
 
-- GET `/api/updates/daily` - Get updates from the past 24 hours
-- GET `/api/updates/weekly` - Get updates from the past week
-- GET `/api/updates/monthly` - Get updates from the past month 
+- `GET /`: Landing page
+- `GET /landscape-analyst`: Regulatory landscape analysis dashboard
+- `POST /api/institution/regulators`: Get regulators for a specific institution
+- `GET /api/updates/<period>`: Get regulatory updates (period: daily, weekly, monthly)
+
+## Technologies Used
+
+- Python/Flask for the backend
+- HTML/CSS/JavaScript for the frontend
+- Perplexity API for AI-powered analysis
+- Flask-CORS for cross-origin resource sharing
+- Gunicorn for production deployment 
