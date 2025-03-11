@@ -833,7 +833,7 @@
                         <div class="card-header">
                             <div class="source-icon">
                                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M20 3H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 3h2v2h-2V6zm0 3h2v2h-2V9zM8 6h2v2H8V6zm0 3h2v2H8V9zm-1 3h12v2H7v-2zM5 6h2v2H5V6zm0 3h2v2H5V9zm0 6h14v2H5v-2z"/>
+                                    <path d="M20 3H4c-1.1 0-2 .9-2 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 3h2v2h-2V6zm0 3h2v2h-2V9zM8 6h2v2H8V6zm0 3h2v2H8V9zm-1 3h12v2H7v-2zM5 6h2v2H5V6zm0 3h2v2H5V9zm0 6h14v2H5v-2z"/>
                                 </svg>
                             </div>
                             <div class="source-info">
@@ -999,16 +999,20 @@
             const regulatorsInfo = document.getElementById('regulators-info');
             const regulatorsContent = document.getElementById('regulators-content');
             
-            institutionForm.addEventListener('click', async function() {
+            institutionForm.addEventListener('click', async function(e) {
+                e.preventDefault();
                 const institutionName = institutionInput.value.trim();
-                if (!institutionName) return;
+                
+                if (!institutionName) {
+                    alert('Please enter an institution name');
+                    return;
+                }
                 
                 // Show loading state
-                document.getElementById('regulators-loading').style.display = 'block';
-                regulatorsInfo.style.display = 'none';
+                document.getElementById('regulators-loading').style.display = 'flex';
+                document.getElementById('regulators-info').style.display = 'none';
                 
                 try {
-                    // Get regulators for the institution
                     const response = await fetch('http://localhost:5001/api/institution/regulators', {
                         method: 'POST',
                         headers: {
@@ -1017,18 +1021,24 @@
                         body: JSON.stringify({ institution: institutionName })
                     });
                     
-                    const regulators = await response.json();
-                    if (response.ok) {
-                        currentInstitution = institutionName;
-                        displayRegulators(regulators);
-                        loadUpdates('daily'); // Reload updates for the current period
-                    } else {
-                        throw new Error(regulators.error || 'Failed to get regulators');
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'Failed to get regulators');
+                    }
+                    
+                    const data = await response.json();
+                    currentInstitution = institutionName;
+                    displayRegulators(data);
+                    
+                    // Load updates for the current time period
+                    const activeTab = document.querySelector('.tab.active');
+                    if (activeTab) {
+                        loadUpdates(activeTab.dataset.period);
                     }
                 } catch (error) {
                     console.error('Error:', error);
                     document.getElementById('regulators-loading').style.display = 'none';
-                    alert('Failed to get regulators. Please try again.');
+                    alert(error.message || 'An error occurred. Please try again.');
                 }
             });
             
