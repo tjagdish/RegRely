@@ -1013,7 +1013,7 @@
                 document.getElementById('regulators-info').style.display = 'none';
                 
                 try {
-                    const response = await fetch('http://localhost:5001/api/institution/regulators', {
+                    const response = await fetch('/api/institution/regulators', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -1122,7 +1122,7 @@
                 gridDiv.innerHTML = createLoadingState();
                 
                 try {
-                    const url = new URL('http://localhost:5001/api/updates/' + period);
+                    const url = new URL(`/api/updates/${period}`, window.location.origin);
                     if (currentInstitution) {
                         url.searchParams.append('institution', currentInstitution);
                     }
