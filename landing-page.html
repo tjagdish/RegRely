@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RegRely - AI-first solutions for risk management</title>
+    <style>
+        :root {
+            --primary: #0e1c36;
+            --primary-light: #1f3a70;
+            --secondary: #4e73df;
+            --accent: #7a97f5;
+            --accent-light: #c3d4ff;
+            --white: #ffffff;
+            --light: #f8f9ff;
+            --dark-text: #2d3748;
+            --light-text: #718096;
+            --success: #38b2ac;
+            --radius: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.06);
+            --transition: all 0.2s ease-in-out;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+        
+        header {
+            background-color: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(5px);
+            box-shadow: var(--shadow-sm);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            height: 72px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .logo-svg {
+            height: 40px;
+            width: 40px;
+            margin-right: 12px;
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--light-text);
+            font-weight: 500;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 24px;
+            background: linear-gradient(180deg, #EFF4FF 0%, #F8FAFF 100%);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-light) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0.4;
+            z-index: 0;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-light) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0.4;
+            z-index: 0;
+        }
+        
+        .hero-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 40px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tagline {
+            font-size: 56px;
+            font-weight: 800;
+            color: #121E40;
+            margin: 0 auto 24px;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+        
+        .sub-tagline {
+            font-size: 20px;
+            color: #6B7280;
+            margin: 0 auto 48px;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 40px;
+            background-color: #121E40;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.2s ease-in-out;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 4px 10px rgba(14, 28, 54, 0.15);
+        }
+        
+        .btn:hover {
+            background-color: #1E2F70;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(14, 28, 54, 0.2);
+        }
+        
+        .products {
+            padding: 100px 0;
+            background-color: var(--white);
+        }
+        
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 60px;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+        
+        .product-card {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .product-icon {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+        }
+        
+        .product-icon svg {
+            width: 48px;
+            height: 48px;
+            fill: var(--white);
+        }
+        
+        .product-content {
+            padding: 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+        
+        .product-description {
+            color: var(--light-text);
+            font-size: 15px;
+            margin-bottom: 24px;
+            flex-grow: 1;
+        }
+        
+        .product-link {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            display: inline-flex;
+            align-items: center;
+            margin-top: auto;
+            transition: var(--transition);
+        }
+        
+        .product-link:hover {
+            color: var(--primary);
+        }
+        
+        .product-link svg {
+            width: 16px;
+            height: 16px;
+            margin-left: 6px;
+            transition: var(--transition);
+        }
+        
+        .product-link:hover svg {
+            transform: translateX(3px);
+        }
+        
+        footer {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 64px 0 32px;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr repeat(3, 1fr);
+            gap: 48px;
+        }
+        
+        .footer-logo {
+            display: inline-block;
+            margin-bottom: 16px;
+            width: 32px;
+            height: 32px;
+        }
+        
+        .footer-about p {
+            color: var(--accent-light);
+            font-size: 15px;
+            margin-bottom: 24px;
+            max-width: 320px;
+        }
+        
+        .footer-heading {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: var(--accent-light);
+            text-decoration: none;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: var(--white);
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--accent-light);
+            font-size: 14px;
+        }
+        
+        /* Mobile-friendly styles */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 72px;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                padding: 20px;
+                box-shadow: var(--shadow-sm);
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                background: none;
+                border: none;
+                padding: 8px;
+                cursor: pointer;
+            }
+            
+            .mobile-menu-btn svg {
+                width: 24px;
+                height: 24px;
+                fill: var(--primary);
+            }
+            
+            .hero {
+                padding: 100px 16px;
+            }
+            
+            .tagline {
+                font-size: 2.5rem;
+                padding: 0 16px;
+            }
+            
+            .sub-tagline {
+                font-size: 1.1rem;
+                padding: 0 16px;
+            }
+            
+            .product-grid {
+                grid-template-columns: 1fr;
+                padding: 0 16px;
+            }
+            
+            .product-card {
+                margin-bottom: 24px;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+                padding: 0 16px;
+            }
+            
+            .container {
+                padding: 0 16px;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tagline {
+                font-size: 2rem;
+            }
+            
+            .sub-tagline {
+                font-size: 1rem;
+            }
+            
+            .product-title {
+                font-size: 1.25rem;
+            }
+            
+            .product-description {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo-container">
+                    <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Matching the middle logo -->
+                        <defs>
+                            <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#4056C5" />
+                                <stop offset="100%" stop-color="#1E2F70" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="48" fill="url(#logo-gradient)" />
+                        
+                        <!-- Same neural network representation as the hero logo -->
+                        <circle cx="50" cy="50" r="6" fill="white" />
+                        <circle cx="50" cy="20" r="6" fill="white" />
+                        <circle cx="80" cy="50" r="6" fill="white" />
+                        <circle cx="50" cy="80" r="6" fill="white" />
+                        <circle cx="20" cy="50" r="6" fill="white" />
+                        
+                        <!-- Connection lines -->
+                        <line x1="50" y1="20" x2="50" y2="50" stroke="white" stroke-width="2" />
+                        <line x1="80" y1="50" x2="50" y2="50" stroke="white" stroke-width="2" />
+                        <line x1="50" y1="80" x2="50" y2="50" stroke="white" stroke-width="2" />
+                        <line x1="20" y1="50" x2="50" y2="50" stroke="white" stroke-width="2" />
+                    </svg>
+                    <span class="logo-text">RegRely</span>
+                </a>
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </button>
+                <div class="nav-links">
+                    <a href="#products">Products</a>
+                    <a href="#about">About</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container" style="max-width: 1000px; margin: 0 auto; text-align: center;">
+            <svg class="hero-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 40px;">
+                <!-- Modern AI-inspired logo -->
+                <defs>
+                    <linearGradient id="hero-logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#4056C5" />
+                        <stop offset="100%" stop-color="#1E2F70" />
+                    </linearGradient>
+                </defs>
+                <circle cx="50" cy="50" r="48" fill="url(#hero-logo-gradient)" />
+                
+                <!-- Neural network representation - simplified version similar to image -->
+                <circle cx="50" cy="50" r="6" fill="white" />
+                <circle cx="50" cy="20" r="6" fill="white" />
+                <circle cx="80" cy="50" r="6" fill="white" />
+                <circle cx="50" cy="80" r="6" fill="white" />
+                <circle cx="20" cy="50" r="6" fill="white" />
+                
+                <!-- Connection lines -->
+                <line x1="50" y1="20" x2="50" y2="50" stroke="white" stroke-width="2" />
+                <line x1="80" y1="50" x2="50" y2="50" stroke="white" stroke-width="2" />
+                <line x1="50" y1="80" x2="50" y2="50" stroke="white" stroke-width="2" />
+                <line x1="20" y1="50" x2="50" y2="50" stroke="white" stroke-width="2" />
+            </svg>
+            <h1 class="tagline" style="font-size: 3.5rem; line-height: 1.2; max-width: 900px; margin: 0 auto 24px;">AI-first solutions for risk management</h1>
+            <p class="sub-tagline" style="font-size: 1.25rem; max-width: 700px; margin: 0 auto 48px; color: #6B7280;">Transforming regulatory compliance with intelligent, data-driven insights that keep you ahead of evolving financial regulations.</p>
+            <a href="#products" class="btn" style="font-size: 1rem; padding: 14px 32px; background-color: #121E40; border-radius: 6px; display: inline-block;">Explore Our Solutions</a>
+        </div>
+    </section>
+
+    <section class="products" id="products">
+        <div class="container">
+            <h2 class="section-title">Our Products</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+                        </svg>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">Landscape Analyst</h3>
+                        <p class="product-description">Stay informed with the latest regulatory updates and banking compliance news, powered by advanced AI analysis.</p>
+                        <a href="/landscape-analyst" class="product-link">
+                            Learn more
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="currentColor"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM13 14H11V12H13V14ZM13 10H11V6H13V10Z" />
+                        </svg>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">Gap Assessor</h3>
+                        <p class="product-description">Identify compliance gaps and take proactive steps to address regulatory requirements with AI-powered analysis.</p>
+                        <a href="gap-assessor.html" class="product-link">
+                            Learn more
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="currentColor"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 4H3C1.9 4 1 4.9 1 6V18C1 19.1 1.9 20 3 20H21C22.1 20 23 19.1 23 18V6C23 4.9 22.1 4 21 4ZM21 18H3V6H21V18ZM9 9H7V11H9V9ZM9 12H7V14H9V12ZM13 9H11V11H13V9ZM13 12H11V14H13V12ZM17 9H15V11H17V9ZM17 12H15V14H17V12Z" />
+                        </svg>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">Remediation Assistant</h3>
+                        <p class="product-description">Streamline your remediation workflow with AI-powered recommendations and automated action plans.</p>
+                        <a href="remediation-assistant.html" class="product-link">
+                            Learn more
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="currentColor"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1ZM12 11.99H19C18.47 16.11 15.72 19.78 12 20.93V12H5V6.3L12 3.19V11.99Z" />
+                        </svg>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">Controls Assistant</h3>
+                        <p class="product-description">Design and monitor effective controls with intelligent risk assessment tools and continuous compliance monitoring.</p>
+                        <a href="controls-assistant.html" class="product-link">
+                            Learn more
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="currentColor"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <svg class="footer-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Simplified but matching logo for footer -->
+                        <circle cx="50" cy="50" r="48" fill="#4056C5" />
+                        <circle cx="50" cy="50" r="6" fill="white" opacity="0.9" />
+                        <circle cx="50" cy="20" r="6" fill="white" opacity="0.7" />
+                        <circle cx="80" cy="50" r="6" fill="white" opacity="0.7" />
+                        <circle cx="50" cy="80" r="6" fill="white" opacity="0.7" />
+                        <circle cx="20" cy="50" r="6" fill="white" opacity="0.7" />
+                    </svg>
+                    <p>RegRely provides cutting-edge AI solutions for regulatory compliance and risk management in the financial sector.</p>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Products</h3>
+                    <ul class="footer-links">
+                        <li><a href="landscape-analyst.html">Landscape Analyst</a></li>
+                        <li><a href="gap-assessor.html">Gap Assessor</a></li>
+                        <li><a href="remediation-assistant.html">Remediation Assistant</a></li>
+                        <li><a href="controls-assistant.html">Controls Assistant</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#team">Our Team</a></li>
+                        <li><a href="#careers">Careers</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#case-studies">Case Studies</a></li>
+                        <li><a href="#webinars">Webinars</a></li>
+                        <li><a href="#documentation">Documentation</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 RegRely. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.nav-links') && !event.target.closest('.mobile-menu-btn')) {
+                    navLinks.classList.remove('active');
+                }
+            });
+            
+            // Close menu when clicking a link
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

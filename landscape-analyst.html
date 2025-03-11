@@ -1,0 +1,1246 @@
+@<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RegRely - Landscape Analyst</title>
+    <style>
+        :root {
+            --primary: #0e1c36;
+            --primary-light: #1f3a70;
+            --secondary: #4e73df;
+            --accent: #7a97f5;
+            --accent-light: #c3d4ff;
+            --white: #ffffff;
+            --light: #f8f9ff;
+            --dark-text: #2d3748;
+            --light-text: #718096;
+            --success: #38b2ac;
+            --danger: #e53e3e;
+            --warning: #ecc94b;
+            --info: #4299e1;
+            --radius: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.06);
+            --transition: all 0.2s ease-in-out;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+        
+        header {
+            background-color: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(5px);
+            box-shadow: var(--shadow-sm);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            height: 72px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .logo-svg {
+            height: 40px;
+            width: 40px;
+            margin-right: 12px;
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--light-text);
+            font-weight: 500;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .page-header {
+            padding: 140px 0 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: 1;
+        }
+        
+        .page-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .page-description {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto;
+            font-weight: 400;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .dashboard {
+            padding: 80px 0;
+        }
+        
+        .dashboard-header {
+            margin-bottom: 48px;
+            text-align: center;
+        }
+        
+        .dashboard-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+        
+        .dashboard-subtitle {
+            font-size: 16px;
+            color: var(--light-text);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .institution-section {
+            margin-bottom: 48px;
+            text-align: center;
+        }
+        
+        .institution-input-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .institution-input-container input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--accent-light);
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+        
+        .institution-input-container button {
+            width: auto;
+            margin: 0 auto;
+        }
+        
+        .regulators-info {
+            margin-top: 24px;
+            padding: 20px;
+            background: var(--light);
+            border-radius: var(--radius);
+            display: none;
+            text-align: left;
+        }
+        
+        .regulators-info h3 {
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+        
+        .regulators-info #regulators-content {
+            /* Add appropriate styles for the regulators content */
+        }
+        
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 48px;
+        }
+        
+        .tab-group {
+            display: inline-flex;
+            background-color: var(--white);
+            border-radius: var(--radius);
+            padding: 4px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--light-text);
+        }
+        
+        .tab.active {
+            background-color: var(--secondary);
+            color: var(--white);
+        }
+        
+        .tab:hover:not(.active) {
+            color: var(--primary);
+            background-color: var(--light);
+        }
+        
+        .regulation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+        
+        .regulation-card {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .regulation-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .card-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+        }
+        
+        .source-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+        }
+        
+        .source-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--primary);
+        }
+        
+        .source-info {
+            flex: 1;
+        }
+        
+        .source-name {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 15px;
+        }
+        
+        .source-date {
+            font-size: 13px;
+            color: var(--light-text);
+        }
+        
+        .card-content {
+            padding: 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .regulation-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        .regulation-summary {
+            color: var(--light-text);
+            font-size: 15px;
+            margin-bottom: 0;
+            flex-grow: 1;
+        }
+        
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            margin-top: auto;
+            width: 100%;
+        }
+        
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            background-color: var(--accent-light);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1;
+        }
+        
+        .tag.critical {
+            background-color: rgba(229, 62, 62, 0.1);
+            color: var(--danger);
+        }
+        
+        .tag.important {
+            background-color: rgba(236, 201, 75, 0.1);
+            color: var(--warning);
+        }
+        
+        .tag.info {
+            background-color: rgba(66, 153, 225, 0.1);
+            color: var(--info);
+        }
+        
+        .read-more {
+            color: var(--secondary);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: var(--transition);
+            padding: 6px 0;
+        }
+        
+        .read-more:hover {
+            color: var(--primary);
+        }
+        
+        .read-more svg {
+            width: 16px;
+            height: 16px;
+            margin-left: 4px;
+            transition: var(--transition);
+        }
+        
+        .read-more:hover svg {
+            transform: translateX(3px);
+        }
+        
+        .load-more-container {
+            text-align: center;
+            margin-top: 48px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 28px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 0;
+        }
+        
+        .empty-state-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            opacity: 0.3;
+        }
+        
+        .empty-state-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 12px;
+        }
+        
+        .empty-state-text {
+            font-size: 16px;
+            color: var(--light-text);
+            max-width: 450px;
+            margin: 0 auto 24px;
+        }
+        
+        /* Time period content */
+        .time-period-content {
+            display: none;
+        }
+        
+        .time-period-content.active {
+            display: block;
+        }
+        
+        footer {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 64px 0 32px;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr repeat(3, 1fr);
+            gap: 48px;
+        }
+        
+        .footer-logo {
+            display: inline-block;
+            margin-bottom: 16px;
+            width: 32px;
+            height: 32px;
+        }
+        
+        .footer-about p {
+            color: var(--accent-light);
+            font-size: 15px;
+            margin-bottom: 24px;
+            max-width: 320px;
+        }
+        
+        .footer-heading {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: var(--accent-light);
+            text-decoration: none;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: var(--white);
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--accent-light);
+            font-size: 14px;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 72px;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                padding: 20px;
+                box-shadow: var(--shadow-sm);
+                flex-direction: column;
+                gap: 16px;
+                z-index: 1000;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                background: none;
+                border: none;
+                padding: 8px;
+                cursor: pointer;
+            }
+            
+            .mobile-menu-btn svg {
+                width: 24px;
+                height: 24px;
+                fill: var(--primary);
+            }
+
+            .page-header {
+                padding: 100px 16px 60px;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+                padding: 0 16px;
+            }
+            
+            .page-description {
+                font-size: 1rem;
+                padding: 0 16px;
+            }
+            
+            .dashboard {
+                padding: 40px 0;
+            }
+            
+            .dashboard-title {
+                font-size: 1.5rem;
+                padding: 0 16px;
+            }
+            
+            .dashboard-subtitle {
+                font-size: 0.9rem;
+                padding: 0 16px;
+            }
+            
+            .tab-container {
+                padding: 0 16px;
+                margin-bottom: 32px;
+            }
+            
+            .tab-group {
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                display: flex;
+                gap: 8px;
+            }
+            
+            .tab {
+                white-space: nowrap;
+                flex: 1;
+                min-width: auto;
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .regulation-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                padding: 0 16px;
+            }
+            
+            .regulation-card {
+                margin-bottom: 16px;
+            }
+            
+            .card-header {
+                padding: 12px 16px;
+            }
+            
+            .card-content {
+                padding: 16px;
+            }
+            
+            .regulation-title {
+                font-size: 1.1rem;
+            }
+            
+            .regulation-summary {
+                font-size: 0.9rem;
+            }
+            
+            .card-footer {
+                padding: 12px 16px;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+                padding: 0 16px;
+            }
+            
+            .container {
+                padding: 0;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.75rem;
+            }
+            
+            .page-description {
+                font-size: 0.9rem;
+            }
+            
+            .dashboard-title {
+                font-size: 1.25rem;
+            }
+            
+            .tab {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+            }
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            position: relative;
+            margin: 100px auto;
+        }
+
+        .double-bounce1, .double-bounce2 {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            opacity: 0.6;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: sk-bounce 2.0s infinite ease-in-out;
+        }
+
+        .double-bounce2 {
+            animation-delay: -1.0s;
+        }
+
+        @keyframes sk-bounce {
+            0%, 100% { 
+                transform: scale(0.0);
+            } 
+            50% { 
+                transform: scale(1.0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="/" class="logo-container">
+                    <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Matching the middle logo -->
+                        <defs>
+                            <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#4056C5" />
+                                <stop offset="100%" stop-color="#1E2F70" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="48" fill="url(#logo-gradient)" />
+                        
+                        <!-- Same neural network representation as the hero logo -->
+                        <circle cx="50" cy="50" r="6" fill="white" />
+                        <circle cx="50" cy="20" r="6" fill="white" />
+                        <circle cx="80" cy="50" r="6" fill="white" />
+                        <circle cx="50" cy="80" r="6" fill="white" />
+                        <circle cx="20" cy="50" r="6" fill="white" />
+                        
+                        <!-- Connection lines -->
+                        <line x1="50" y1="20" x2="50" y2="50" stroke="white" stroke-width="2" />
+                        <line x1="80" y1="50" x2="50" y2="50" stroke="white" stroke-width="2" />
+                        <line x1="50" y1="80" x2="50" y2="50" stroke="white" stroke-width="2" />
+                        <line x1="20" y1="50" x2="50" y2="50" stroke="white" stroke-width="2" />
+                    </svg>
+                    <span class="logo-text">RegRely</span>
+                </a>
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </button>
+                <div class="nav-links">
+                    <a href="index.html#products">Products</a>
+                    <a href="index.html#about">About</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Landscape Analyst</h1>
+            <p class="page-description">Stay informed with the latest regulatory updates and banking compliance news, powered by advanced AI analysis.</p>
+        </div>
+    </section>
+
+    <section class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2 class="dashboard-title">Regulatory Intelligence Dashboard</h2>
+                <p class="dashboard-subtitle">Track the latest regulatory developments that impact your business, powered by Perplexity Sonar.</p>
+            </div>
+            
+            <!-- Institution Input Section -->
+            <div class="institution-section" style="margin-bottom: 48px; text-align: center;">
+                <p style="margin-bottom: 16px; color: var(--dark-text);">Would you like regulatory updates tailored to your financial institution?</p>
+                <div class="institution-input-container" style="max-width: 600px; margin: 0 auto;">
+                    <input type="text" id="institution-name" placeholder="Enter your institution's name" 
+                           style="width: 100%; padding: 12px; border: 2px solid var(--accent-light); border-radius: var(--radius); 
+                                  margin-bottom: 16px; font-size: 16px;">
+                    <button id="submit-institution" class="btn" style="width: auto; margin: 0 auto;">Get Tailored Updates</button>
+                </div>
+                <!-- Loading State -->
+                <div id="regulators-loading" style="display: none; margin-top: 24px;">
+                    <div class="spinner" style="margin: 0 auto 16px; width: 40px; height: 40px;">
+                        <div class="double-bounce1"></div>
+                        <div class="double-bounce2"></div>
+                    </div>
+                    <p style="color: var(--light-text); font-size: 16px;">Analyzing your institution's regulatory landscape...</p>
+                </div>
+                <!-- Results State -->
+                <div id="regulators-info" class="card" style="display: none; margin-top: 24px; text-align: left; background: white; 
+                                                             border-radius: var(--radius); box-shadow: var(--shadow-md); 
+                                                             border: 1px solid var(--accent-light); overflow: hidden;">
+                    <div style="background: linear-gradient(135deg, var(--primary), var(--primary-light)); 
+                              padding: 20px; color: white;">
+                        <h3 style="margin: 0; font-size: 20px; font-weight: 600;">Your Regulatory Landscape</h3>
+                    </div>
+                    <div id="regulators-content" style="padding: 24px;">
+                        <!-- Content will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-container">
+                <div class="tab-group">
+                    <div class="tab active" data-period="daily">Last 24 Hours</div>
+                    <div class="tab" data-period="weekly">Past Week</div>
+                    <div class="tab" data-period="monthly">Past Month</div>
+                </div>
+            </div>
+            
+            <!-- Daily updates (last 24 hours) -->
+            <div class="time-period-content active" id="daily-content">
+                <div class="regulation-grid">
+                    <div class="regulation-card">
+                        <div class="card-header">
+                            <div class="source-icon">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91c4.59-1.15 8-5.86 8-10.91V5L12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                </svg>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">Federal Reserve</div>
+                                <div class="source-date">Today, 10:32 AM</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="regulation-title">Updated Guidance on LIBOR Transition for Financial Institutions</h3>
+                            <p class="regulation-summary">The Federal Reserve released updated guidance for financial institutions on managing risks associated with the LIBOR transition. The guidance emphasizes the need for robust fallback language in contracts and comprehensive transition plans.</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="tag critical">Critical</div>
+                            <a href="#" class="read-more">
+                                Read more
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="currentColor"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="regulation-card">
+                        <div class="card-header">
+                            <div class="source-icon">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 3H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 3h2v2h-2V6zm0 3h2v2h-2V9zM8 6h2v2H8V6zm0 3h2v2H8V9zm-1 3h12v2H7v-2zM5 6h2v2H5V6zm0 3h2v2H5V9zm0 6h14v2H5v-2z"/>
+                                </svg>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">OCC</div>
+                                <div class="source-date">Today, 09:15 AM</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="regulation-title">New Framework for Climate-Related Financial Risk Management</h3>
+                            <p class="regulation-summary">The Office of the Comptroller of the Currency has proposed a new framework for banks to identify, measure, monitor, and control climate-related financial risks. The framework aims to ensure safety and soundness in banking operations.</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="tag important">Important</div>
+                            <a href="#" class="read-more">
+                                Read more
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="currentColor"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="regulation-card">
+                        <div class="card-header">
+                            <div class="source-icon">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/>
+                                </svg>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">SEC</div>
+                                <div class="source-date">Yesterday, 04:45 PM</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="regulation-title">Enhanced Disclosure Requirements for Cryptocurrency Assets</h3>
+                            <p class="regulation-summary">The Securities and Exchange Commission issued new rules requiring enhanced disclosures for financial institutions holding or facilitating transactions in cryptocurrency assets. The rules aim to improve transparency and investor protection.</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="tag important">Important</div>
+                            <a href="#" class="read-more">
+                                Read more
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="currentColor"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="regulation-card">
+                        <div class="card-header">
+                            <div class="source-icon">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H5v-2h7v2zm7-4H5v-2h14v2zm0-4H5V7h14v2z"/>
+                                </svg>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">FDIC</div>
+                                <div class="source-date">Yesterday, 01:20 PM</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="regulation-title">Updated Guidelines on Third-Party Risk Management</h3>
+                            <p class="regulation-summary">The FDIC has released updated guidelines on managing risks associated with third-party relationships. The guidelines highlight the importance of due diligence, contract negotiations, and ongoing monitoring of service providers.</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="tag info">Informational</div>
+                            <a href="#" class="read-more">
+                                Read more
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="currentColor"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Weekly updates -->
+            <div class="time-period-content" id="weekly-content">
+                <div class="regulation-grid">
+                    <!-- Weekly content would be dynamically loaded -->
+                    <div class="empty-state">
+                        <svg class="empty-state-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-4h2v2h-2zm0-10h2v8h-2z" fill="currentColor"/>
+                        </svg>
+                        <h3 class="empty-state-title">Weekly data will appear here</h3>
+                        <p class="empty-state-text">Weekly regulatory updates are being analyzed. Check back soon for the latest insights.</p>
+                        <button class="btn btn-outline">Refresh Data</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Monthly updates -->
+            <div class="time-period-content" id="monthly-content">
+                <div class="regulation-grid">
+                    <!-- Monthly content would be dynamically loaded -->
+                    <div class="empty-state">
+                        <svg class="empty-state-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-4h2v2h-2zm0-10h2v8h-2z" fill="currentColor"/>
+                        </svg>
+                        <h3 class="empty-state-title">Monthly data will appear here</h3>
+                        <p class="empty-state-text">Monthly regulatory updates are being analyzed. Check back soon for the latest insights.</p>
+                        <button class="btn btn-outline">Refresh Data</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="load-more-container">
+                <button class="btn">Load More Updates</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <svg class="footer-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Simplified but matching logo for footer -->
+                        <circle cx="50" cy="50" r="48" fill="#4056C5" />
+                        <circle cx="50" cy="50" r="6" fill="white" opacity="0.9" />
+                        <circle cx="50" cy="20" r="6" fill="white" opacity="0.7" />
+                        <circle cx="80" cy="50" r="6" fill="white" opacity="0.7" />
+                        <circle cx="50" cy="80" r="6" fill="white" opacity="0.7" />
+                        <circle cx="20" cy="50" r="6" fill="white" opacity="0.7" />
+                    </svg>
+                    <p>RegRely provides cutting-edge AI solutions for regulatory compliance and risk management in the financial sector.</p>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Products</h3>
+                    <ul class="footer-links">
+                        <li><a href="landscape-analyst.html">Landscape Analyst</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2024 RegRely. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu functionality
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+            let currentInstitution = null;
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.nav-links') && !event.target.closest('.mobile-menu-btn')) {
+                    navLinks.classList.remove('active');
+                }
+            });
+            
+            // Institution submission handling
+            const institutionForm = document.getElementById('submit-institution');
+            const institutionInput = document.getElementById('institution-name');
+            const regulatorsInfo = document.getElementById('regulators-info');
+            const regulatorsContent = document.getElementById('regulators-content');
+            
+            institutionForm.addEventListener('click', async function() {
+                const institutionName = institutionInput.value.trim();
+                if (!institutionName) return;
+                
+                // Show loading state
+                document.getElementById('regulators-loading').style.display = 'block';
+                regulatorsInfo.style.display = 'none';
+                
+                try {
+                    // Get regulators for the institution
+                    const response = await fetch('http://localhost:5001/api/institution/regulators', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ institution: institutionName })
+                    });
+                    
+                    const regulators = await response.json();
+                    if (response.ok) {
+                        currentInstitution = institutionName;
+                        displayRegulators(regulators);
+                        loadUpdates('daily'); // Reload updates for the current period
+                    } else {
+                        throw new Error(regulators.error || 'Failed to get regulators');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    document.getElementById('regulators-loading').style.display = 'none';
+                    alert('Failed to get regulators. Please try again.');
+                }
+            });
+            
+            function displayRegulators(regulators) {
+                let html = '<div style="margin-bottom: 20px;">';
+                
+                // Federal regulators
+                if (regulators.federal_regulators && regulators.federal_regulators.length > 0) {
+                    html += `
+                        <div class="regulator-section">
+                            <h4 style="color: var(--primary); margin-bottom: 16px; font-size: 18px; 
+                                     display: flex; align-items: center; gap: 8px;">
+                                <svg viewBox="0 0 24 24" width="24" height="24" style="fill: var(--primary);">
+                                    <path d="M12 2L2 8v2h20V8L12 2zm-7 6l7-4 7 4H5zm15 14H4v-2h16v2zm0-5H4v-2h16v2z"/>
+                                </svg>
+                                Federal Regulators
+                            </h4>
+                            <div class="regulator-grid">
+                    `;
+                    
+                    regulators.federal_regulators.forEach(reg => {
+                        html += `
+                            <div class="regulator-card" style="background: var(--light); border-radius: var(--radius); 
+                                                              padding: 16px; margin-bottom: 16px;">
+                                <h5 style="color: var(--primary); margin: 0 0 8px; font-size: 16px; font-weight: 600;">
+                                    ${reg.name}
+                                </h5>
+                                <p style="color: var(--light-text); margin: 0; font-size: 14px; line-height: 1.5;">
+                                    ${reg.responsibilities}
+                                </p>
+                            </div>
+                        `;
+                    });
+                    
+                    html += '</div></div>';
+                }
+                
+                // State regulators
+                if (regulators.state_regulators && regulators.state_regulators.length > 0) {
+                    html += `
+                        <div class="regulator-section" style="margin-top: 24px;">
+                            <h4 style="color: var(--primary); margin-bottom: 16px; font-size: 18px; 
+                                     display: flex; align-items: center; gap: 8px;">
+                                <svg viewBox="0 0 24 24" width="24" height="24" style="fill: var(--primary);">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                                </svg>
+                                State Regulators
+                            </h4>
+                            <div class="regulator-grid">
+                    `;
+                    
+                    regulators.state_regulators.forEach(reg => {
+                        html += `
+                            <div class="regulator-card" style="background: var(--light); border-radius: var(--radius); 
+                                                              padding: 16px; margin-bottom: 16px;">
+                                <h5 style="color: var(--primary); margin: 0 0 8px; font-size: 16px; font-weight: 600;">
+                                    ${reg.name} <span style="color: var(--light-text); font-weight: normal;">(${reg.state})</span>
+                                </h5>
+                                <p style="color: var(--light-text); margin: 0; font-size: 14px; line-height: 1.5;">
+                                    ${reg.responsibilities}
+                                </p>
+                            </div>
+                        `;
+                    });
+                    
+                    html += '</div></div>';
+                }
+                
+                html += '</div>';
+                regulatorsContent.innerHTML = html;
+                document.getElementById('regulators-loading').style.display = 'none';
+                regulatorsInfo.style.display = 'block';
+            }
+
+            // Modified loadUpdates function to handle institution-specific updates
+            async function loadUpdates(period) {
+                const contentDiv = document.getElementById(`${period}-content`);
+                const gridDiv = contentDiv.querySelector('.regulation-grid');
+                
+                // Show loading state
+                gridDiv.innerHTML = createLoadingState();
+                
+                try {
+                    const url = new URL('http://localhost:5001/api/updates/' + period);
+                    if (currentInstitution) {
+                        url.searchParams.append('institution', currentInstitution);
+                    }
+                    
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error('Failed to fetch updates');
+                    
+                    const updates = await response.json();
+                    console.log('Received updates:', updates);
+                    
+                    if (updates && updates.length > 0) {
+                        gridDiv.innerHTML = updates.map(update => createRegulationCard(update)).join('');
+                    } else {
+                        gridDiv.innerHTML = createEmptyState('No regulatory updates found for this time period.');
+                    }
+                } catch (error) {
+                    console.error('Error loading updates:', error);
+                    gridDiv.innerHTML = createEmptyState('Failed to load regulatory updates. Please try again later.');
+                }
+            }
+
+            // Function to create a regulation card
+            function createRegulationCard(update) {
+                return `
+                    <div class="regulation-card">
+                        <div class="card-header">
+                            <div class="source-icon">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91c4.59-1.15 8-5.86 8-10.91V5L12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                </svg>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">${update.source_name}</div>
+                                <div class="source-date">${update.source_date}</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="regulation-title">${update.title}</h3>
+                            <p class="regulation-summary">${update.summary}</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="tag ${update.importance}">${update.importance.charAt(0).toUpperCase() + update.importance.slice(1)}</div>
+                            ${update.citations && update.citations.length > 0 ? 
+                                `<a href="${update.citations[0]}" target="_blank" class="read-more">
+                                    Read more
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="currentColor"/>
+                                    </svg>
+                                </a>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Function to create empty state
+            function createEmptyState(message) {
+                return `
+                    <div class="empty-state">
+                        <svg class="empty-state-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-4h2v2h-2zm0-10h2v8h-2z" fill="currentColor"/>
+                        </svg>
+                        <h3 class="empty-state-title">No Updates Available</h3>
+                        <p class="empty-state-text">${message}</p>
+                        <button class="btn btn-outline refresh-btn">Refresh Data</button>
+                    </div>
+                `;
+            }
+
+            // Function to create loading state
+            function createLoadingState() {
+                return `
+                    <div class="empty-state">
+                        <div class="spinner" style="margin: 0 auto 20px;">
+                            <div class="double-bounce1"></div>
+                            <div class="double-bounce2"></div>
+                        </div>
+                        <h3 class="empty-state-title">Loading Updates</h3>
+                        <p class="empty-state-text">Fetching the latest regulatory information...</p>
+                    </div>
+                `;
+            }
+
+            // Tab functionality with data loading
+            const tabs = document.querySelectorAll('.tab');
+            const timePeriodsContent = document.querySelectorAll('.time-period-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const period = tab.getAttribute('data-period');
+                    
+                    // Update active states
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    timePeriodsContent.forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    const selectedContent = document.getElementById(`${period}-content`);
+                    selectedContent.classList.add('active');
+                    
+                    // Load data for the selected period
+                    loadUpdates(period);
+                });
+            });
+
+            // Load initial data for daily updates
+            loadUpdates('daily');
+
+            // Add refresh functionality
+            document.addEventListener('click', function(event) {
+                if (event.target.classList.contains('refresh-btn')) {
+                    const activeTab = document.querySelector('.tab.active');
+                    if (activeTab) {
+                        loadUpdates(activeTab.getAttribute('data-period'));
+                    }
+                }
+            });
+
+            // Handle load more button
+            const loadMoreBtn = document.querySelector('.load-more-container .btn');
+            loadMoreBtn.addEventListener('click', () => {
+                const activeTab = document.querySelector('.tab.active');
+                if (activeTab) {
+                    loadUpdates(activeTab.getAttribute('data-period'));
+                }
+            });
+        });
+    </script>
+</body>
+</html>
